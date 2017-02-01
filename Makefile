@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/02/01 18:27:18 by aalliot          ###   ########.fr        #
+#    Updated: 2017/02/01 19:15:56 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,8 @@ $(DEBUG_LIB): $(LIBFT_DEBUG) $(DEBUG_OBJ)
 
 $(DYNAMIC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(FLAGS) $(OPTI) -fPIC $(DEPENDS) -I$(HEAD_DIR) -I$(LIBFT_HEAD) -o $@ -c $<
+
+-include $(DEBUG_OBJ:.o=.d)
 
 $(DEBUG_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(FLAGS) $(OPTI) -g -fPIC $(DEPENDS) -I$(HEAD_DIR) -I$(LIBFT_HEAD) -o $@ -c $<
