@@ -1,0 +1,5 @@
+libft_malloc_*.so
+*.o
+*.a
+/dynamic/
+/debug/
