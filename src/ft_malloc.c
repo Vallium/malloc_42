@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:51:55 by aalliot           #+#    #+#             */
-/*   Updated: 2017/02/01 16:55:31 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/03/29 18:02:51 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	*malloc(size_t size)
 {
 	(void)size;
-	void*	test = NULL;
 
-	return (test);
+	ft_putchar('b');
+	return (NULL);
 }

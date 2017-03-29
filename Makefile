@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/02/01 19:15:56 by aalliot          ###   ########.fr        #
+#    Updated: 2017/03/29 18:17:47 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,10 @@ $(LIBFT_STATIC):
 $(LIBFT_DEBUG):
 	make -C libft/ libft_debug.a
 
-.PHONY: clean fclean re norme
+.PHONY: clean fclean re binary
+
+binary:
+	$(CC) -o malloc_test main.c -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 clean:
 	make -C libft clean
