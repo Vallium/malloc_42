@@ -3,3 +3,5 @@ libft_malloc_*.so
 *.a
 /dynamic/
 /debug/
+/static/
+malloc_test
