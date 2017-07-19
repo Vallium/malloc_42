@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/03/31 16:49:22 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/19 14:18:56 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ DYNAMIC_LIB	= libft_malloc_$(HOSTTYPE).so
 STATIC_LIB	= libft_malloc_$(HOSTTYPE).a
 DEBUG_LIB	= libft_malloc_$(HOSTTYPE)_debug.so
 
-SRC =	ft_malloc.c
+SRC =	malloc.c		\
+		realloc.c		\
+		free.c
 
 HEAD_DIR	= includes
 SRC_DIR		= src
@@ -52,7 +54,7 @@ endif
 
 $(shell mkdir -p $(DYNAMIC_DIR) $(STATIC_DIR) $(DEBUG_DIR))
 
-all: $(STATIC_LIB) binary $(DYNAMIC_LIB)
+all: $(DYNAMIC_LIB)
 
 debug: $(DEBUG_LIB) binary_debug
 
@@ -91,7 +93,7 @@ $(LIBFT_DEBUG):
 .PHONY: clean fclean re binary
 
 binary:
-	$(CC) -o malloc_test main.c $(STATIC_LIB) $(LIBFT_STATIC) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o malloc_test main.c $(LIBFT_STATIC) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 binary_debug:
 	$(CC) -g -o malloc_test main.c $(DEBUG_LIB) $(LIBFT_DEBUG) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
