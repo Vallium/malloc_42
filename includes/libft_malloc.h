@@ -6,21 +6,23 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/20 17:16:44 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/20 18:33:20 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_MALLOC_H
 # define LIBFT_MALLOC_H
 
-# include <stdio.h>
 # include <libft.h>
+# include <unistd.h> 
 
-# define TINY_MAX_SIZE 			(2 * getpagessize() - sizeof(t_alloc))
+# define TINY_MAX_SIZE 			1 * getpagesize()
 # define MIN_NB_TINY_ALLOCS		100
+# define TINY_ZONE_SIZE			(TINY_MAX_SIZE + sizeof(t_alloc)) * MIN_NB_TINY_ALLOCS + sizeof(t_zone)
 
-# define SMALL_MAX_SIZE			(8 * getpagessize() - sizeof(t_alloc))
+# define SMALL_MAX_SIZE			4 * getpagesize() 
 # define MIN_NB_SMALL_ALLOCS	100
+# define SMALL_ZONE_SIZE		(SMALL_MAX_SIZE + sizeof(t_alloc)) * MIN_NB_SMALL_ALLOCS + sizeof(t_zone)
 
 # define TRUE	1
 # define FALSE	0
@@ -45,7 +47,7 @@ typedef struct	s_zone
 {
 	e_type			type;
 	t_alloc			*allocs;
-	short			nb_allocs;
+	int				size_left;
 	struct s_zone	*next;
 }				t_zone;
 

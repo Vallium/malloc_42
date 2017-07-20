@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:51:55 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/20 17:17:38 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/20 18:15:53 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,13 @@ void	*new_zone(size_t size)
 	t_zone	*zone;
 	
 	(void)size;
-	zone = mmap(0, (1 * getpagesize()) + sizeof(t_zone), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+
+	if ((int)size <= TINY_MAX_SIZE)
+		zone = mmap(0, TINY_ZONE_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	else if ((int)size <= SMALL_MAX_SIZE)
+		zone = mmap(0, SMALL_ZONE_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	else
+		zone = mmap(0, (10 * getpagesize()), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	
 	zone->type = TINY;
 	zone->allocs = NULL;
