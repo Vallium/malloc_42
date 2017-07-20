@@ -5,3 +5,4 @@ libft_malloc_*.so
 /debug/
 /static/
 malloc_test
+malloc_test_debug*

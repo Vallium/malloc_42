@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/19 14:18:56 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/20 15:55:03 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,17 +56,16 @@ $(shell mkdir -p $(DYNAMIC_DIR) $(STATIC_DIR) $(DEBUG_DIR))
 
 all: $(DYNAMIC_LIB)
 
-debug: $(DEBUG_LIB) binary_debug
+debug: $(DEBUG_LIB)
 
 $(DYNAMIC_LIB): $(LIBFT_STATIC) $(DYNAMIC_OBJ)
 	$(CC) $(OPTI) -shared -o $@ $(DYNAMIC_OBJ) $(LIBFT_STATIC)
 
+$(DEBUG_LIB): $(LIBFT_DEBUG) $(DEBUG_OBJ)
+	$(CC) $(OPTI) -g -shared -o $@ $(DYNAMIC_OBJ) $(LIBFT_STATIC)
+
 $(STATIC_LIB): $(LIBFT_STATIC) $(STATIC_OBJ)
 	ar rc $@ $(STATIC_OBJ)
-	ranlib $@
-
-$(DEBUG_LIB): $(LIBFT_DEBUG) $(DEBUG_OBJ)
-	ar rc $@ $(DEBUG_OBJ)
 	ranlib $@
 
 -include $(DYNAMIC_OBJ:.o=.d)
@@ -82,7 +81,7 @@ $(STATIC_DIR)/%.o: $(SRC_DIR)/%.c
 -include $(DEBUG_OBJ:.o=.d)
 
 $(DEBUG_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(FLAGS) -g $(DEPENDS) -I$(HEAD_DIR) -I$(LIBFT_HEAD) -o $@ -c $<
+	$(CC) $(FLAGS) -g -fPIC $(DEPENDS) -I$(HEAD_DIR) -I$(LIBFT_HEAD) -o $@ -c $<
 
 $(LIBFT_STATIC):
 	make -C libft/ libft.a
@@ -96,7 +95,7 @@ binary:
 	$(CC) -o malloc_test main.c $(LIBFT_STATIC) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 binary_debug:
-	$(CC) -g -o malloc_test main.c $(DEBUG_LIB) $(LIBFT_DEBUG) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -g -o malloc_test_debug main.c $(DEBUG_LIB) $(LIBFT_DEBUG) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 clean:
 	make -C libft clean
