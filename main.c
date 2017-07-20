@@ -6,16 +6,11 @@ int		main()
 	char	*str;
 	int		i;
 
-	write(1, "AA", 2);
+	printf("\n\n\n\n---------------------------------------------------------\n~~ Main Test ~~\n");
+	printf("1st Call to malloc:\n");	
 	malloc(10);
-	return 0;
-	write(1, "BB", 2);
-	i = 0;
-
-	//while(i < 10)
-	//	str[i] = 'A' + i, i++;
-	//str[i] = 0;
-
-	//printf("%p\n", str);
+	printf("\n2nd Call to malloc:\n");	
+	malloc(10);
+	
 	return(0);
 }
