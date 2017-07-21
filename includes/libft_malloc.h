@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/20 18:33:20 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/21 14:24:59 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct	s_zone
 {
 	e_type			type;
 	t_alloc			*allocs;
-	int				size_left;
+	int				mem_left;
 	struct s_zone	*next;
 }				t_zone;
 
