@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/22 16:21:19 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/22 18:57:46 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define MIN_NB_SMALL_ALLOCS	100
 # define SMALL_ZONE_SIZE		(SMALL_MAX_SIZE + sizeof(t_alloc)) * MIN_NB_SMALL_ALLOCS + sizeof(t_zone)
 
+# define JUMPOF(size)			(sizeof(char) * size)
+
 # define TRUE	1
 # define FALSE	0
 
@@ -40,6 +42,7 @@ typedef struct	s_alloc
 	short			size;
 	bool			freed;
 	struct s_alloc	*next;
+	struct s_alloc	*prev;
 }				t_alloc;
 
 typedef struct	s_zone
@@ -47,6 +50,7 @@ typedef struct	s_zone
 	e_type			type;
 	t_alloc			*allocs;
 	int				mem_left;
+	int				nb_allocs;
 	struct s_zone	*next;
 }				t_zone;
 

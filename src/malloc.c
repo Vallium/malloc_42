@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:51:55 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/22 16:27:18 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/22 19:01:27 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,21 +91,6 @@ void	zone_smartpushback(t_zone *new)
 	}
 }
 
-void	alloc_pushback(t_alloc **start, t_alloc *new)
-{
-	t_alloc	*alloc;
-
-	alloc = *start;
-	if (!(*start))
-		*start = new;
-	else
-	{
-		while (alloc->next)
-			alloc = alloc->next;
-		alloc->next = new;
-	}
-}
-
 t_zone		*new_zone(e_type type)
 {
 	t_zone	*zone;
@@ -124,6 +109,7 @@ t_zone		*new_zone(e_type type)
 	}
 	zone->next = NULL;
 	zone->allocs = (void*)zone + sizeof(t_zone);
+	zone->nb_allocs = 0;
 	zone_smartpushback(zone);
 	return (zone);
 }
@@ -139,8 +125,24 @@ void	*new_zone_large(int	size)
 	zone->type = LARGE;
 	zone->next = NULL;
 	zone->allocs = (void*)zone + sizeof(t_zone);
+	zone->nb_allocs = 0;
 	zone_smartpushback(zone);
 	return (zone);
+}
+
+void	alloc_pushback(t_alloc **start, t_alloc *new)
+{
+	t_alloc	*alloc;
+
+	alloc = *start;
+	if (!(*start))
+		*start = new;
+	else
+	{
+		while (alloc->next)
+			alloc = alloc->next;
+		alloc->next = new;
+	}
 }
 
 void	*alloc_large(int size)
@@ -153,7 +155,45 @@ void	*alloc_large(int size)
 	alloc->size = size;
 	alloc->freed = FALSE;
 	alloc->next = NULL;
-	return (zone->allocs + sizeof(t_alloc));
+	zone->nb_allocs++;
+	return (alloc + sizeof(t_alloc));
+}
+
+void	*find_valid_zone(int size, e_type type)
+{
+	t_zone	*tmp;
+
+	tmp = g_allocs.zones;
+	while (tmp)
+	{
+		if (tmp->type == type && (size + (int)sizeof(t_alloc) <= tmp->mem_left))
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (new_zone(type));
+}
+
+void	*alloc(int size, e_type type)
+{
+	t_zone	*zone;
+	t_alloc	*alloc;
+
+	zone = find_valid_zone(size, type);
+	alloc = zone->allocs;
+	if (zone->nb_allocs)
+	{
+		while (alloc->next)
+			alloc = alloc->next;
+		alloc->prev = alloc;
+		alloc = alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
+	}
+	else
+		alloc->prev = NULL;
+	alloc->size = size;
+	alloc->freed = FALSE;
+	alloc->next = NULL;
+	zone->nb_allocs++;
+	return (alloc + sizeof(t_alloc));
 }
 
 void	*new_alloc(int size, e_type type)
@@ -163,28 +203,29 @@ void	*new_alloc(int size, e_type type)
 	ret = NULL;
 	if (type == LARGE)
 		ret = alloc_large(size);
+	else
+		ret = alloc(size, type);
 	return ret;
 }
 
-void	*alloc(int size, e_type type)
-{
-	(void)size, (void)type;
-	return NULL;
-}
+#include <stdlib.h>
 
 void	*malloc(size_t size)
 {
 	void	*ret;
 
-	ret = alloc_large(size);
+	ret = alloc(size, TINY);
 	show_alloc_mem();
+	ft_putstr("\n-----------------------------------------------------\n");
+	//exit(0);
 	return ret;
 
 	if ((int)size <= TINY_MAX_SIZE)	
-		ret = alloc((int)size, TINY);
+		ret = new_alloc((int)size, TINY);
 	else if ((int)size <= SMALL_MAX_SIZE)
-		ret = alloc((int)size, SMALL);
+		ret = new_alloc((int)size, SMALL);
 	else
-		ret = alloc((int)size, LARGE);
+		ret = new_alloc((int)size, LARGE);
+	show_alloc_mem();
 	return (ret);
 }
