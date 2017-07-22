@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:51:55 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/21 16:59:10 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/22 16:27:18 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,43 @@ t_allocs g_allocs = {
 	.zones = NULL
 };
 
-void	print_zones() 
+void	show_alloc_mem() 
 {
-	t_zone *zone;
+	t_zone	*zone;
+	t_alloc	*alloc;
+	int		total;
 
+	alloc = NULL;
 	zone = g_allocs.zones;
-	while (zone->next)
+	total = 0;
+	while (zone)
 	{
+		if (zone->type == TINY)
+			ft_putstr("TINY : ");
+		else if (zone->type == SMALL)
+			ft_putstr("SMALL : ");
+		else
+			ft_putstr("LARGE : ");
 		ft_putptr(zone);
-		ft_putchar(' ');
+		ft_putchar('\n');
+
+		alloc = zone->allocs;
+		while (alloc)
+		{
+			ft_putptr(alloc + sizeof(t_alloc));
+			ft_putstr(" - ");
+			ft_putptr(alloc + sizeof(t_alloc) + alloc->size * sizeof(char));
+			ft_putstr(" : ");
+			ft_putnbr(alloc->size);
+			ft_putstr(alloc->size > 1 ? " octets\n" : " octet\n");
+			total += alloc->size;
+			alloc = alloc->next;
+		}
 		zone = zone->next;
 	}
-	ft_putstr("\n\n----------------------------\n\n");
+	ft_putstr("Total : ");
+	ft_putnbr(total);
+	ft_putstr(total ? " octets\n" : " octet\n");
 }
 
 void	zone_pushback(t_zone *new)
@@ -64,7 +89,6 @@ void	zone_smartpushback(t_zone *new)
 		zonestart = g_allocs.zones;
 		zoneend = new;
 	}
-	print_zones();
 }
 
 void	alloc_pushback(t_alloc **start, t_alloc *new)
@@ -107,9 +131,11 @@ t_zone		*new_zone(e_type type)
 void	*new_zone_large(int	size)
 {
 	t_zone	*zone;
+	int		s;
 
-	(void)size;
-	zone = mmap(0, 10 * getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	size = size + sizeof(t_zone) + sizeof(t_alloc);
+	s = (size / getpagesize()) + (size % getpagesize() ? 1 : 0);
+	zone = mmap(0, s * getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	zone->type = LARGE;
 	zone->next = NULL;
 	zone->allocs = (void*)zone + sizeof(t_zone);
@@ -123,27 +149,36 @@ void	*alloc_large(int size)
 	t_alloc	*alloc;
 	
 	zone = new_zone_large(size);
-	
-	return (ret);
+	alloc = zone->allocs;
+	alloc->size = size;
+	alloc->freed = FALSE;
+	alloc->next = NULL;
+	return (zone->allocs + sizeof(t_alloc));
 }
 
 void	*new_alloc(int size, e_type type)
 {
+	void	*ret;
+
+	ret = NULL;
 	if (type == LARGE)
-	{
-		alloc_large(size);
-	}
-	return NULL;
+		ret = alloc_large(size);
+	return ret;
 }
 
 void	*alloc(int size, e_type type)
 {
-
+	(void)size, (void)type;
+	return NULL;
 }
 
 void	*malloc(size_t size)
 {
 	void	*ret;
+
+	ret = alloc_large(size);
+	show_alloc_mem();
+	return ret;
 
 	if ((int)size <= TINY_MAX_SIZE)	
 		ret = alloc((int)size, TINY);

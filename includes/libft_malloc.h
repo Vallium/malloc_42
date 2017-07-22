@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/21 14:24:59 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/22 16:21:19 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct	s_alloc
 {
 	short			size;
 	bool			freed;
-	struct s_alloc	*prev;
 	struct s_alloc	*next;
 }				t_alloc;
 
@@ -58,6 +57,8 @@ typedef struct	s_allocs
 }				t_allocs;
 
 extern t_allocs g_allocs;
+
+void	show_alloc_mem();
 
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
