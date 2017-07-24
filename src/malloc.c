@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:51:55 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/24 18:21:15 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/24 18:37:21 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ void	*alloc(int size, e_type type)
 	zone->mem_left -= size + sizeof(t_alloc);
 	return (alloc + sizeof(t_alloc));
 }
+
 
 void	*new_alloc(int size, e_type type)
 {

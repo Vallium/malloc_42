@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/20 15:55:03 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/24 18:32:28 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,6 @@ ifeq ($(HOSTTYPE),)
 endif
 
 DYNAMIC_LIB	= libft_malloc_$(HOSTTYPE).so
-STATIC_LIB	= libft_malloc_$(HOSTTYPE).a
 DEBUG_LIB	= libft_malloc_$(HOSTTYPE)_debug.so
 
 SRC =	malloc.c		\
@@ -27,15 +26,12 @@ SRC =	malloc.c		\
 HEAD_DIR	= includes
 SRC_DIR		= src
 DYNAMIC_DIR	= dynamic
-STATIC_DIR	= static
 DEBUG_DIR	= debug
 
 DYNAMIC_OBJ		= $(patsubst %.c,$(DYNAMIC_DIR)/%.o,$(SRC))
-STATIC_OBJ		= $(patsubst %.c,$(STATIC_DIR)/%.o,$(SRC))
 DEBUG_OBJ		= $(patsubst %.c,$(DEBUG_DIR)/%.o,$(SRC))
 
 #DYNAMIC_DEPS	= $(patsubst %.c,$(DYNAMIC_DIR)/%.d,$(SRC))
-#STATIC_DEPS		= $(patsubst %.c,$(STATIC_DIR)/%.d,$(SRC))
 #DEBUG_DEPS		= $(patsubst %.c,$(DEBUG_DIR)/%.d,$(SRC))
 
 LIBFT_STATIC	= libft/libft.a
@@ -52,7 +48,7 @@ else
 	FLAGS = -Wall -Wextra -Werror
 endif
 
-$(shell mkdir -p $(DYNAMIC_DIR) $(STATIC_DIR) $(DEBUG_DIR))
+$(shell mkdir -p $(DYNAMIC_DIR) $(DEBUG_DIR))
 
 all: $(DYNAMIC_LIB)
 
@@ -64,19 +60,10 @@ $(DYNAMIC_LIB): $(LIBFT_STATIC) $(DYNAMIC_OBJ)
 $(DEBUG_LIB): $(LIBFT_DEBUG) $(DEBUG_OBJ)
 	$(CC) $(OPTI) -g -shared -o $@ $(DYNAMIC_OBJ) $(LIBFT_STATIC)
 
-$(STATIC_LIB): $(LIBFT_STATIC) $(STATIC_OBJ)
-	ar rc $@ $(STATIC_OBJ)
-	ranlib $@
-
 -include $(DYNAMIC_OBJ:.o=.d)
 
 $(DYNAMIC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(FLAGS) $(OPTI) -fPIC $(DEPENDS) -I$(HEAD_DIR) -I$(LIBFT_HEAD) -o $@ -c $<
-
--include $(STATIC_OBJ:.o=.d)
-
-$(STATIC_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(FLAGS) $(OPTI) $(DEPENDS) -I$(HEAD_DIR) -I$(LIBFT_HEAD) -o $@ -c $<
 
 -include $(DEBUG_OBJ:.o=.d)
 
@@ -99,11 +86,11 @@ binary_debug:
 
 clean:
 	make -C libft clean
-	@rm -f $(DYNAMIC_OBJ) $(STATIC_OBJ) $(DEBUG_OBJ) $(DYNAMIC_DEPS) $(STATIC_DEPS) $(DEBUG_DEPS)
+	@rm -f $(DYNAMIC_OBJ) $(DEBUG_OBJ) $(DYNAMIC_DEPS) $(DEBUG_DEPS)
 
 fclean: clean
 	make -C libft fclean
-	@rm -f $(DYNAMIC_LIB) $(STATIC_LIB) $(DEBUG_LIB)
+	@rm -f $(DYNAMIC_LIB) $(DEBUG_LIB)
 
 re: fclean
 	make
