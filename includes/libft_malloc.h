@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/22 18:57:46 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/24 18:23:28 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 # include <libft.h>
 # include <unistd.h> 
 
-# define TINY_MAX_SIZE 			1 * getpagesize()
+# define TINY_MAX_SIZE 			1 * getpagesize() * sizeof(char)
 # define MIN_NB_TINY_ALLOCS		100
 # define TINY_ZONE_SIZE			(TINY_MAX_SIZE + sizeof(t_alloc)) * MIN_NB_TINY_ALLOCS + sizeof(t_zone)
 
-# define SMALL_MAX_SIZE			4 * getpagesize() 
+# define SMALL_MAX_SIZE			4 * getpagesize() * sizeof(char) 
 # define MIN_NB_SMALL_ALLOCS	100
 # define SMALL_ZONE_SIZE		(SMALL_MAX_SIZE + sizeof(t_alloc)) * MIN_NB_SMALL_ALLOCS + sizeof(t_zone)
 
@@ -41,8 +41,8 @@ typedef struct	s_alloc
 {
 	short			size;
 	bool			freed;
+	bool			last;
 	struct s_alloc	*next;
-	struct s_alloc	*prev;
 }				t_alloc;
 
 typedef struct	s_zone
