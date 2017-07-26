@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:27:06 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 17:40:49 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 17:50:53 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void		zone_smartpushback(t_zone *new)
 	}
 }
 
-t_zone			*new_zone(e_type type)
+static t_zone	*new_zone(e_type type)
 {
 	t_zone	*zone;
 
@@ -83,4 +83,18 @@ t_zone			*new_zone_large(size_t size)
 	zone->nb_allocs = 0;
 	zone_smartpushback(zone);
 	return (zone);
+}
+
+t_zone			*find_valid_zone(size_t size, e_type type)
+{
+	t_zone	*tmp;
+
+	tmp = g_allocs.zones;
+	while (tmp)
+	{
+		if (tmp->type == type && (size + sizeof(t_alloc) <= tmp->mem_left))
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (new_zone(type));
 }

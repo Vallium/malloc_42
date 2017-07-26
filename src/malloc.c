@@ -32,20 +32,6 @@ void	*new_alloc_large(int size)
 	return (alloc + sizeof(t_alloc));
 }
 
-void	*find_valid_zone(size_t size, e_type type)
-{
-	t_zone	*tmp;
-
-	tmp = g_allocs.zones;
-	while (tmp)
-	{
-		if (tmp->type == type && (size + sizeof(t_alloc) <= tmp->mem_left))
-			return (tmp);
-		tmp = tmp->next;
-	}
-	return (new_zone(type));
-}
-
 void	*new_alloc(size_t size, e_type type)
 {
 	t_zone	*zone;
