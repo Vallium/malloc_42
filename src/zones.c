@@ -46,7 +46,7 @@ static void		zone_smartpushback(t_zone *new)
 	}
 }
 
-static t_zone	*new_zone(e_type type)
+static t_zone	*new_zone(t_type type)
 {
 	t_zone	*zone;
 
@@ -85,7 +85,7 @@ t_zone			*new_zone_large(size_t size)
 	return (zone);
 }
 
-t_zone			*find_valid_zone(size_t size, e_type type)
+t_zone			*find_valid_zone(size_t size, t_type type)
 {
 	t_zone	*tmp;
 

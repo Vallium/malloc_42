@@ -6,14 +6,13 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:51:55 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 17:58:17 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 18:19:32 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft_malloc.h"
 
 t_allocs g_allocs = {
-	.nb_zones = 0,
 	.zones = NULL
 };
 

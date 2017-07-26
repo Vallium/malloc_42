@@ -27,7 +27,7 @@ void	*new_alloc_large(size_t size)
 	return (alloc + sizeof(t_alloc));
 }
 
-void	*new_alloc(size_t size, e_type type)
+void	*new_alloc(size_t size, t_type type)
 {
 	t_zone	*zone;
 	t_alloc	*alloc;

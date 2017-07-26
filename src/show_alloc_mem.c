@@ -22,7 +22,7 @@ static void		print_alloc(t_alloc *alloc)
 	ft_putstr(alloc->size > 1 ? " octets\n" : " octet\n");
 }
 
-static void		print_zone_type(e_type type)
+static void		print_zone_type(t_type type)
 {
 	if (type == TINY)
 		ft_putstr("TINY : ");
