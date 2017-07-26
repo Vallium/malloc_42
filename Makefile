@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/24 18:32:28 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/26 15:28:15 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,8 @@ endif
 
 DYNAMIC_LIB	= libft_malloc_$(HOSTTYPE).so
 DEBUG_LIB	= libft_malloc_$(HOSTTYPE)_debug.so
+
+LIBNAME		= ft_malloc_$(HOSTTYPE)
 
 SRC =	malloc.c		\
 		realloc.c		\
@@ -79,7 +81,7 @@ $(LIBFT_DEBUG):
 .PHONY: clean fclean re binary
 
 binary:
-	$(CC) -o malloc_test main.c $(LIBFT_STATIC) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o malloc_test main.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 binary_debug:
 	$(CC) -g -o malloc_test_debug main.c $(DEBUG_LIB) $(LIBFT_DEBUG) -I$(HEAD_DIR) -I$(LIBFT_HEAD)

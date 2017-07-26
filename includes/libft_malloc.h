@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/24 18:23:28 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 14:57:35 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 
 # include <libft.h>
 # include <unistd.h> 
+
+//# define SMALL_ZONE_SIZE			256 * getpagesize() * sizeof(char)
+//# define MIN_NB_SMALL_ALLOCS		100
+//# define SMALL_MAX_SIZE			(SMALL_ZONE_SIZE - sizeof(t_zone)) / (MIN_NB_SMALL_ALLOCS * sizeof(t_alloc))
+
+//# define TINY_ZONE_SIZE			128 * getpagesize() * sizeof(char) 
+//# define MIN_NB_TINY_ALLOCS		100
+//# define TINY_MAX_SIZE			(TINY_ZONE_SIZE - sizeof(t_zone)) / (MIN_NB_TINY_ALLOCS * sizeof(t_alloc))
 
 # define TINY_MAX_SIZE 			1 * getpagesize() * sizeof(char)
 # define MIN_NB_TINY_ALLOCS		100
@@ -42,6 +50,7 @@ typedef struct	s_alloc
 	short			size;
 	bool			freed;
 	bool			last;
+	size_t			number;
 	struct s_alloc	*next;
 }				t_alloc;
 
@@ -49,7 +58,7 @@ typedef struct	s_zone
 {
 	e_type			type;
 	t_alloc			*allocs;
-	int				mem_left;
+	size_t				mem_left;
 	int				nb_allocs;
 	struct s_zone	*next;
 }				t_zone;
@@ -63,6 +72,8 @@ typedef struct	s_allocs
 extern t_allocs g_allocs;
 
 void	show_alloc_mem();
+
+void	test_func();
 
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);

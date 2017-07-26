@@ -6,11 +6,11 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:51:55 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/24 18:37:21 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 15:07:34 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft_malloc.h>
+#include "libft_malloc.h"
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -19,17 +19,35 @@ t_allocs g_allocs = {
 	.zones = NULL
 };
 
+void	print_alloc(t_alloc *alloc)
+{
+		ft_putnbr(alloc->number);
+		ft_putstr(" -> ");
+		ft_putptr((char*)alloc + sizeof(t_alloc));
+		ft_putstr(" - ");
+		ft_putptr((char*)alloc + sizeof(t_alloc) + JUMPOF(alloc->size));
+		ft_putstr(" : ");
+		ft_putnbr(alloc->size);
+		ft_putstr(alloc->size > 1 ? " octets\n" : " octet\n");
+}
+
+void	test_func() {
+	ft_putstr("jsuis un bidon!\n");
+}
+
 void	show_alloc_mem() 
 {
 	t_zone	*zone;
 	t_alloc	*alloc;
 	int		total;
+	int		i;
 
 	alloc = NULL;
 	zone = g_allocs.zones;
 	total = 0;
 	while (zone)
 	{
+		i = 1;
 		if (zone->type == TINY)
 			ft_putstr("TINY : ");
 		else if (zone->type == SMALL)
@@ -38,25 +56,19 @@ void	show_alloc_mem()
 			ft_putstr("LARGE : ");
 		ft_putptr(zone);
 		ft_putchar('\n');
-
 		alloc = zone->allocs;
 		while (alloc->last == FALSE)
 		{
-			ft_putptr(alloc + sizeof(t_alloc));
-			ft_putstr(" - ");
-			ft_putptr(alloc + sizeof(t_alloc) + alloc->size * sizeof(char));
-			ft_putstr(" : ");
-			ft_putnbr(alloc->size);
-			ft_putstr(alloc->size > 1 ? " octets\n" : " octet\n");
+			ft_putnbr(i);
+			ft_putstr(" | ");
+			print_alloc(alloc);
 			total += alloc->size;
 			alloc = alloc->next;
+			i++;
 		}
-		ft_putptr(alloc + sizeof(t_alloc));
-		ft_putstr(" - ");
-		ft_putptr(alloc + sizeof(t_alloc) + alloc->size * sizeof(char));
-		ft_putstr(" : ");
-		ft_putnbr(alloc->size);
-		ft_putstr(alloc->size > 1 ? " octets\n" : " octet\n");
+		ft_putnbr(i);
+		ft_putstr(" | ");
+		print_alloc(alloc);
 		total += alloc->size;
 		zone = zone->next;
 	}
@@ -98,21 +110,23 @@ void	zone_smartpushback(t_zone *new)
 	}
 }
 
+#include <stdlib.h>
+
 t_zone		*new_zone(e_type type)
 {
 	t_zone	*zone;
 
 	if (type == TINY)
 	{
-		zone = mmap(0, TINY_ZONE_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+		zone = mmap(0, TINY_ZONE_SIZE, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 		zone->type = TINY;
-		zone->mem_left = (char)TINY_ZONE_SIZE - sizeof(t_zone);
+		zone->mem_left = TINY_ZONE_SIZE - sizeof(t_zone);
 	}
 	else
 	{
-		zone = mmap(0, SMALL_ZONE_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+		zone = mmap(0, SMALL_ZONE_SIZE, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 		zone->type = SMALL;
-		zone->mem_left = (char)SMALL_ZONE_SIZE - sizeof(t_zone);
+		zone->mem_left = SMALL_ZONE_SIZE - sizeof(t_zone);
 	}
 	zone->next = NULL;
 	zone->allocs = (void*)zone + sizeof(t_zone);
@@ -121,14 +135,14 @@ t_zone		*new_zone(e_type type)
 	return (zone);
 }
 
-void	*new_zone_large(int	size)
+void	*new_zone_large(size_t	size)
 {
 	t_zone	*zone;
-	int		s;
+	size_t		s;
 
 	size = size + sizeof(t_zone) + sizeof(t_alloc);
 	s = (size / getpagesize()) + (size % getpagesize() ? 1 : 0);
-	zone = mmap(0, s * getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	zone = mmap(0, s * getpagesize(), PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	zone->type = LARGE;
 	zone->next = NULL;
 	zone->allocs = (void*)zone + sizeof(t_zone);
@@ -162,30 +176,30 @@ void	*alloc_large(int size)
 	alloc->size = size;
 	alloc->freed = FALSE;
 	alloc->next = NULL;
+	alloc->last = TRUE;
 	zone->nb_allocs++;
 	return (alloc + sizeof(t_alloc));
 }
 
-#include <stdlib.h>
-
-void	*find_valid_zone(int size, e_type type)
+void	*find_valid_zone(size_t size, e_type type)
 {
 	t_zone	*tmp;
 
 	tmp = g_allocs.zones;
 	while (tmp)
 	{
-		if (tmp->type == type && ((int)(size * sizeof(char) + sizeof(t_alloc)) <= tmp->mem_left))
+		if (tmp->type == type && (size + sizeof(t_alloc) <= tmp->mem_left))
 			return (tmp);
 		tmp = tmp->next;
 	}
 	return (new_zone(type));
 }
 
-void	*alloc(int size, e_type type)
+void	*alloc(size_t size, e_type type)
 {
 	t_zone	*zone;
 	t_alloc	*alloc;
+	static size_t alloc_number = 1;
 
 	zone = find_valid_zone(size, type);
 	alloc = zone->allocs;
@@ -194,14 +208,17 @@ void	*alloc(int size, e_type type)
 		while (alloc->last == FALSE)
 			alloc = alloc->next;
 		alloc->last = FALSE;
-		alloc = alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
+		alloc = alloc->next;
 		alloc->last = TRUE;
 	}
 	else
 		alloc->last = TRUE;
 	alloc->size = size;
 	alloc->freed = FALSE;
-	alloc->next = alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
+	alloc->next = (void*)alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
+	
+	alloc->number = alloc_number++;
+
 	zone->nb_allocs++;
 	zone->mem_left -= size + sizeof(t_alloc);
 	return (alloc + sizeof(t_alloc));
@@ -224,19 +241,14 @@ void	*malloc(size_t size)
 {
 	void	*ret;
 
-	//ret = alloc(size, TINY);
-	//show_alloc_mem();
-	ft_putstr("\n-----------------------------------------------------\n");
-	//if (g_allocs.zones->nb_allocs == 16)
-	//	exit(0);
-	//return ret;
+	//ft_putstr("\n-----------------------------------------------------\n");
 
 	if (size <= TINY_MAX_SIZE)	
-		ret = new_alloc((int)size, TINY);
+		ret = new_alloc(size, TINY);
 	else if (size <= SMALL_MAX_SIZE)
-		ret = new_alloc((int)size, SMALL);
+		ret = new_alloc(size, SMALL);
 	else
-		ret = new_alloc((int)size, LARGE);
-	show_alloc_mem();
+		ret = new_alloc(size, LARGE);
+	//show_alloc_mem();
 	return (ret);
 }
