@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 17:50:28 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 17:54:46 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void	show_alloc_mem();
 
 t_zone	*new_zone_large(size_t size);
 t_zone	*find_valid_zone(size_t size, e_type type);
+
+void	*new_alloc_large(size_t size);
+void	*new_alloc(size_t size, e_type type);
 
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);

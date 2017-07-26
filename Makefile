@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/26 17:30:42 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/26 17:55:11 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ SRC =	malloc.c			\
 		realloc.c			\
 		free.c				\
 		show_alloc_mem.c	\
-		zones.c
+		zones.c				\
+		alloc.c				
 
 HEAD_DIR	= includes
 SRC_DIR		= src
