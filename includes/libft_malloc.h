@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 18:28:59 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 18:59:43 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct			s_alloc
 	size_t			size;
 	t_bool			freed;
 	t_bool			last;
+	void			*zone;
 	struct s_alloc	*next;
 }						t_alloc;
 

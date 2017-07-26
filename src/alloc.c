@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:52:05 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 17:55:51 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 18:58:59 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ void	*new_alloc_large(size_t size)
 	alloc->freed = FALSE;
 	alloc->next = NULL;
 	alloc->last = TRUE;
+	alloc->zone = zone;
 	zone->nb_allocs++;
-	return (alloc + sizeof(t_alloc));
+	return ((void*)alloc + sizeof(t_alloc));
 }
 
 void	*new_alloc(size_t size, t_type type)
@@ -46,8 +47,9 @@ void	*new_alloc(size_t size, t_type type)
 		alloc->last = TRUE;
 	alloc->size = size;
 	alloc->freed = FALSE;
+	alloc->zone = zone;
 	alloc->next = (void*)alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
 	zone->nb_allocs++;
 	zone->mem_left -= size + sizeof(t_alloc);
-	return (alloc + sizeof(t_alloc));
+	return ((void*)alloc + sizeof(t_alloc));
 }
