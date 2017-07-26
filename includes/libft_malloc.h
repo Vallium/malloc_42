@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 14:57:35 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 16:08:57 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@
 # include <libft.h>
 # include <unistd.h> 
 
-//# define SMALL_ZONE_SIZE			256 * getpagesize() * sizeof(char)
-//# define MIN_NB_SMALL_ALLOCS		100
-//# define SMALL_MAX_SIZE			(SMALL_ZONE_SIZE - sizeof(t_zone)) / (MIN_NB_SMALL_ALLOCS * sizeof(t_alloc))
-
-//# define TINY_ZONE_SIZE			128 * getpagesize() * sizeof(char) 
-//# define MIN_NB_TINY_ALLOCS		100
-//# define TINY_MAX_SIZE			(TINY_ZONE_SIZE - sizeof(t_zone)) / (MIN_NB_TINY_ALLOCS * sizeof(t_alloc))
-
 # define TINY_MAX_SIZE 			1 * getpagesize() * sizeof(char)
 # define MIN_NB_TINY_ALLOCS		100
 # define TINY_ZONE_SIZE			(TINY_MAX_SIZE + sizeof(t_alloc)) * MIN_NB_TINY_ALLOCS + sizeof(t_zone)
@@ -32,7 +24,7 @@
 # define MIN_NB_SMALL_ALLOCS	100
 # define SMALL_ZONE_SIZE		(SMALL_MAX_SIZE + sizeof(t_alloc)) * MIN_NB_SMALL_ALLOCS + sizeof(t_zone)
 
-# define JUMPOF(size)			(sizeof(char) * size)
+# define JUMPOF(size)			sizeof(char) * size
 
 # define TRUE	1
 # define FALSE	0
