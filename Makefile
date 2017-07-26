@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/26 17:03:48 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/26 17:30:42 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,11 @@ DEBUG_LIB	= libft_malloc_$(HOSTTYPE)_debug.so
 
 LIBNAME		= ft_malloc_$(HOSTTYPE)
 
-SRC =	malloc.c		\
-		realloc.c		\
-		free.c			\
-		show_alloc_mem.c
+SRC =	malloc.c			\
+		realloc.c			\
+		free.c				\
+		show_alloc_mem.c	\
+		zones.c
 
 HEAD_DIR	= includes
 SRC_DIR		= src

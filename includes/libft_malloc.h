@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 16:08:57 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/26 17:39:57 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include <libft.h>
 # include <unistd.h> 
+
+# define MMAP_PROTS				PROT_READ | PROT_WRITE
+# define MMAP_MAPS				MAP_ANONYMOUS | MAP_PRIVATE
 
 # define TINY_MAX_SIZE 			1 * getpagesize() * sizeof(char)
 # define MIN_NB_TINY_ALLOCS		100
@@ -42,7 +45,6 @@ typedef struct	s_alloc
 	short			size;
 	bool			freed;
 	bool			last;
-	size_t			number;
 	struct s_alloc	*next;
 }				t_alloc;
 
@@ -65,7 +67,8 @@ extern t_allocs g_allocs;
 
 void	show_alloc_mem();
 
-void	test_func();
+t_zone	*new_zone(e_type type);
+t_zone	*new_zone_large(size_t size);
 
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
