@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 18:59:43 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/27 17:03:52 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,13 @@ typedef short			t_bool;
 
 typedef struct			s_alloc
 {
+	int				a;
 	size_t			size;
 	t_bool			freed;
 	t_bool			last;
 	void			*zone;
 	struct s_alloc	*next;
+	int				b;
 }						t_alloc;
 
 typedef struct			s_zone
@@ -58,6 +60,7 @@ typedef struct			s_zone
 	size_t			mem_left;
 	size_t			nb_allocs;
 	struct s_zone	*next;
+	struct s_zone	*prev;
 }						t_zone;
 
 typedef struct			s_allocs

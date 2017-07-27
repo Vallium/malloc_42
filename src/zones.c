@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:27:06 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 17:50:53 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/27 15:24:40 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ static void		zone_pushback(t_zone *new)
 
 	zone = g_allocs.zones;
 	if (!(g_allocs.zones))
+	{
+		new->prev = NULL;
 		g_allocs.zones = new;
+	}
 	else
 	{
 		while (zone->next)
@@ -36,6 +39,7 @@ static void		zone_smartpushback(t_zone *new)
 	if (zonestart && g_allocs.zones == zonestart)
 	{
 		zoneend->next = new;
+		new->prev = zoneend;
 		zoneend = new;
 	}
 	else

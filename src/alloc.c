@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:52:05 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 18:58:59 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/27 17:04:40 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	*new_alloc_large(size_t size)
 
 	zone = new_zone_large(size);
 	alloc = zone->allocs;
+	alloc->a = 985256;
+	alloc->b = -212858;
 	alloc->size = size;
 	alloc->freed = FALSE;
 	alloc->next = NULL;
@@ -45,6 +47,8 @@ void	*new_alloc(size_t size, t_type type)
 	}
 	else
 		alloc->last = TRUE;
+	alloc->a = 985256;
+	alloc->b = -212858;
 	alloc->size = size;
 	alloc->freed = FALSE;
 	alloc->zone = zone;

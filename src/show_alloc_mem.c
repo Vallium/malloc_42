@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 16:55:28 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/26 17:14:39 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/27 17:16:46 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@ static void		print_alloc(t_alloc *alloc)
 	ft_putstr(alloc->size > 1 ? " octets\n" : " octet\n");
 }
 
-static void		print_zone_type(t_type type)
+static void		print_zone(t_zone *zone)
 {
-	if (type == TINY)
+	if (zone->type == TINY)
 		ft_putstr("TINY : ");
-	else if (type == SMALL)
+	else if (zone->type == SMALL)
 		ft_putstr("SMALL : ");
 	else
 		ft_putstr("LARGE : ");
+	ft_putptr(zone);
+	ft_putchar('\n');
 }
 
 static void		print_total(size_t total)
@@ -49,16 +51,15 @@ void			show_alloc_mem(void)
 	total = 0;
 	while (zone)
 	{
-		print_zone_type(zone->type);
-		ft_putptr(zone);
-		ft_putchar('\n');
+		print_zone(zone);
 		alloc = zone->allocs;
 		while (alloc->last == FALSE)
 		{
-			if (alloc->freed == TRUE)
-				continue;
-			print_alloc(alloc);
-			total += alloc->size;
+			if (alloc->freed != TRUE)
+			{
+				print_alloc(alloc);
+				total += alloc->size;
+			}
 			alloc = alloc->next;
 		}
 		print_alloc(alloc);
