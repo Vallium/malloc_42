@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:04:47 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/27 17:14:42 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/27 17:38:31 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void			free(void *ptr)
 	t_zone	*zone;
 
 	alloc = (t_alloc*)(ptr - JUMPOF(sizeof(t_alloc)));
-	if (alloc->a != 985256 || alloc->b != -212858)
+	if (alloc->a != A_MAGIC || alloc->b != B_MAGIC)
 		return ;
 	zone = alloc->zone;
 	alloc->freed = TRUE;

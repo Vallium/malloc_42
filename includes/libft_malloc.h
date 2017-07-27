@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/27 17:03:52 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/27 19:06:46 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 # define SMALL_ZONE_SIZE	(SMALL_MAX_SIZE + S(t_alloc)) * NB_SMAL + S(t_zone)
 
 # define JUMPOF(size)		sizeof(char) * size
+
+# define A_MAGIC			985256
+# define B_MAGIC			-212858
 
 # define TRUE				1
 # define FALSE				0
