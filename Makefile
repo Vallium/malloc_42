@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/26 17:55:11 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/29 15:55:46 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ DYNAMIC_LIB	= libft_malloc_$(HOSTTYPE).so
 DEBUG_LIB	= libft_malloc_$(HOSTTYPE)_debug.so
 
 LIBNAME		= ft_malloc_$(HOSTTYPE)
+LINKNAME	= libf_malloc.so
 
 SRC =	malloc.c			\
 		realloc.c			\
@@ -61,6 +62,7 @@ debug: $(DEBUG_LIB)
 
 $(DYNAMIC_LIB): $(LIBFT_STATIC) $(DYNAMIC_OBJ)
 	$(CC) $(OPTI) -shared -o $@ $(DYNAMIC_OBJ) $(LIBFT_STATIC)
+	ln -fs $(DYNAMIC_LIB) $(LINKNAME) 
 
 $(DEBUG_LIB): $(LIBFT_DEBUG) $(DEBUG_OBJ)
 	$(CC) $(OPTI) -g -shared -o $@ $(DYNAMIC_OBJ) $(LIBFT_STATIC)
@@ -95,7 +97,7 @@ clean:
 
 fclean: clean
 	make -C libft fclean
-	@rm -f $(DYNAMIC_LIB) $(DEBUG_LIB)
+	@rm -f $(DYNAMIC_LIB) $(DEBUG_LIB) $(LINKNAME)
 
 re: fclean
 	make
