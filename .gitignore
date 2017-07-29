@@ -1,4 +1,4 @@
-libft_malloc_*.so
+libft_malloc*.so
 libft_malloc.so
 *.o
 *.a
