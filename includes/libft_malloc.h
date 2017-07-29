@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/27 19:06:46 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/29 18:24:21 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <libft.h>
 # include <unistd.h>
+# include <pthread.h>
 
 # define MMAP_PROTS			PROT_READ | PROT_WRITE
 # define MMAP_MAPS			MAP_ANONYMOUS | MAP_PRIVATE
@@ -71,7 +72,8 @@ typedef struct			s_allocs
 	t_zone	*zones;
 }						t_allocs;
 
-extern					t_allocs g_allocs;
+t_allocs				g_allocs;
+pthread_mutex_t			g_thread_lock;
 
 void					show_alloc_mem();
 
@@ -84,5 +86,4 @@ void					*new_alloc(size_t size, t_type type);
 void					*malloc(size_t size);
 void					*realloc(void *ptr, size_t size);
 void					free(void *ptr);
-
 #endif

@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:04:47 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/27 17:38:31 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/29 18:15:48 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,13 @@ void			free(void *ptr)
 	t_alloc	*alloc;
 	t_zone	*zone;
 
+	pthread_mutex_lock(&g_thread_lock);
 	alloc = (t_alloc*)(ptr - JUMPOF(sizeof(t_alloc)));
 	if (alloc->a != A_MAGIC || alloc->b != B_MAGIC)
+	{
+		pthread_mutex_unlock(&g_thread_lock);
 		return ;
+	}
 	zone = alloc->zone;
 	alloc->freed = TRUE;
 	zone->nb_allocs--;
@@ -54,4 +58,5 @@ void			free(void *ptr)
 			munmap(zone, sizeof(t_zone) + \
 					sizeof(t_alloc) + JUMPOF(zone->allocs->size));
 	}
+	pthread_mutex_unlock(&g_thread_lock);
 }
