@@ -1,4 +1,5 @@
 libft_malloc_*.so
+libft_malloc.so
 *.o
 *.a
 /dynamic/
@@ -6,3 +7,7 @@ libft_malloc_*.so
 /static/
 malloc_test
 malloc_test_debug*
+test0
+test1
+test2
+my_test*
