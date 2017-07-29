@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/29 17:00:58 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/29 18:39:46 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ DYNAMIC_LIB	= libft_malloc_$(HOSTTYPE).so
 DEBUG_LIB	= libft_malloc_$(HOSTTYPE)_debug.so
 
 LIBNAME		= ft_malloc_$(HOSTTYPE)
-LINKNAME	= libf_malloc.so
+LINKNAME	= libft_malloc.so
 
 SRC =	malloc.c			\
 		realloc.c			\
