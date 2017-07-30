@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 16:55:28 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/27 17:16:46 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/30 17:45:37 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void			show_alloc_mem(void)
 	t_alloc	*alloc;
 	size_t	total;
 
+	pthread_mutex_lock(&g_thread_lock);
 	zone = g_allocs.zones;
 	total = 0;
 	while (zone)
@@ -67,4 +68,5 @@ void			show_alloc_mem(void)
 		zone = zone->next;
 	}
 	print_total(total);
+	pthread_mutex_lock(&g_thread_lock);
 }
