@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/29 18:39:46 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/30 16:17:19 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ DYNAMIC_LIB	= libft_malloc_$(HOSTTYPE).so
 DEBUG_LIB	= libft_malloc_$(HOSTTYPE)_debug.so
 
 LIBNAME		= ft_malloc_$(HOSTTYPE)
+DEBUGLIBNAME= ft_malloc_$(HOSTTYPE)_debug
 LINKNAME	= libft_malloc.so
 
 SRC =	malloc.c			\
@@ -56,6 +57,8 @@ endif
 
 $(shell mkdir -p $(DYNAMIC_DIR) $(DEBUG_DIR))
 
+.PHONY: all debug clean fclean re binary binary_debug tests
+
 all: $(DYNAMIC_LIB)
 
 debug: $(DEBUG_LIB)
@@ -83,18 +86,20 @@ $(LIBFT_STATIC):
 $(LIBFT_DEBUG):
 	make -C libft/ libft_debug.a
 
-.PHONY: clean fclean re binary
-
 binary:
 	$(CC) -o malloc_test main.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 binary_debug:
-	$(CC) -g -o malloc_test_debug main.c $(DEBUG_LIB) $(LIBFT_DEBUG) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -g -o malloc_test_debug main.c -L. -l$(DEBUGLIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 tests:
-	$(CC) -o my_test0 test0.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
-	$(CC) -o my_test1 test1.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
-	$(CC) -o my_test2 test2.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o my_test0 test_srcs/test0.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o my_test1 test_srcs/test1.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o my_test2 test_srcs/test2.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o my_test3 test_srcs/test3.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o my_test3+ test_srcs/test3+.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o my_test4 test_srcs/test4.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o my_test5 test_srcs/test5.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 clean:
 	make -C libft clean
@@ -102,7 +107,7 @@ clean:
 
 fclean: clean
 	make -C libft fclean
-	@rm -f $(DYNAMIC_LIB) $(DEBUG_LIB) $(LINKNAME)
+	@rm -f $(DYNAMIC_LIB) $(DEBUG_LIB) $(LINKNAME) my_test* malloc_test malloc_test_debug
 
 re: fclean
 	make
