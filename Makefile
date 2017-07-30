@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/07/30 16:17:19 by aalliot          ###   ########.fr        #
+#    Updated: 2017/07/30 16:25:03 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,13 +86,13 @@ $(LIBFT_STATIC):
 $(LIBFT_DEBUG):
 	make -C libft/ libft_debug.a
 
-binary:
+binary: $(DYNAMIC_LIB)
 	$(CC) -o malloc_test main.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
-binary_debug:
+binary_debug: $(DYNAMIC_DEBUG_LIB)
 	$(CC) -g -o malloc_test_debug main.c -L. -l$(DEBUGLIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
-tests:
+tests: $(DYNAMIC_LIB)
 	$(CC) -o my_test0 test_srcs/test0.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 	$(CC) -o my_test1 test_srcs/test1.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 	$(CC) -o my_test2 test_srcs/test2.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
