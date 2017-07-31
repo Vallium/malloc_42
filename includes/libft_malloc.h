@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/29 18:24:21 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/07/31 10:25:23 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 # define S(x)				sizeof(x)
 
+/*/
 # define TINY_MAX_SIZE 		1 * getpagesize() * sizeof(char)
 # define NB_TINYS			100
 # define TINY_ZONE_SIZE		(TINY_MAX_SIZE + S(t_alloc)) * NB_TINYS + S(t_zone)
@@ -29,6 +30,19 @@
 # define SMALL_MAX_SIZE		4 * getpagesize() * sizeof(char)
 # define NB_SMAL			100
 # define SMALL_ZONE_SIZE	(SMALL_MAX_SIZE + S(t_alloc)) * NB_SMAL + S(t_zone)
+// */
+
+# define TINY_MAX_SIZE 		4096 * sizeof(char)
+# define NB_TINYS			100
+# define TINY_S				(TINY_MAX_SIZE + S(t_alloc)) * NB_TINYS + S(t_zone)
+# define T_SIZE				(TINY_S / getpagesize()) + (TINY_S % getpagesize() ? 1 : 0)
+# define TINY_ZONE_SIZE		T_SIZE * getpagesize()
+
+# define SMALL_MAX_SIZE		8192 * sizeof(char)
+# define NB_SMAL			100
+# define SMALL_S			(SMALL_MAX_SIZE + S(t_alloc)) * NB_SMAL + S(t_zone)
+# define S_SIZE				(SMALL_S / getpagesize()) + (SMALL_S % getpagesize() ? 1 : 0)
+# define SMALL_ZONE_SIZE	S_SIZE * getpagesize()
 
 # define JUMPOF(size)		sizeof(char) * size
 
