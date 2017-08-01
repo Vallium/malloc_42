@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/01 14:24:05 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/01 17:37:16 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,11 @@ typedef struct			s_allocs
 }						t_allocs;
 
 t_allocs				g_allocs;
-pthread_mutex_t			g_thread_lock;
+pthread_mutex_t			g_mutex;
 
 void					show_alloc_mem();
 
+pthread_mutex_t			*mutex_sglton();
 t_zone					*new_zone_large(size_t size);
 t_zone					*find_valid_zone(size_t size, t_type type);
 

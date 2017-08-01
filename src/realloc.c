@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:05:37 by aalliot           #+#    #+#             */
-/*   Updated: 2017/07/29 18:21:17 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/01 14:33:08 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void		realloc_same_place(t_alloc **alloc, t_zone **zone, size_t size)
 
 static void		*return_ptr(void *ptr)
 {
-	pthread_mutex_unlock(&g_thread_lock);
+	pthread_mutex_unlock(mutex_sglton());
 	return (ptr);
 }
 
@@ -41,14 +41,14 @@ void			*realloc(void *ptr, size_t size)
 	t_zone	*zone;
 	t_alloc	*alloc;
 
-	if (!ptr && size)
+	if (ptr == NULL)
 		return (malloc(size));
-	else if (ptr && !size)
+	else if (size == 0)
 	{
 		free(ptr);
 		return (NULL);
 	}
-	pthread_mutex_lock(&g_thread_lock);
+	pthread_mutex_lock(mutex_sglton());
 	alloc = (t_alloc*)(ptr - JUMPOF(sizeof(t_alloc)));
 	if (alloc->a != A_MAGIC || alloc->b != B_MAGIC)
 		return (return_ptr(ptr));
