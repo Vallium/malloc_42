@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:04:47 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/01 17:39:31 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/02 14:51:01 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void			free(void *ptr)
 	t_alloc	*alloc;
 	t_zone	*zone;
 
-	if (ptr == NULL)
-		return ;
 	pthread_mutex_lock(mutex_sglton());
+	if (ptr == NULL)
+		return ((void)pthread_mutex_unlock(mutex_sglton()));
 	alloc = (t_alloc*)(ptr - JUMPOF(sizeof(t_alloc)));
 	if (alloc->a != A_MAGIC || alloc->b != B_MAGIC)
 		return ((void)pthread_mutex_unlock(mutex_sglton()));

@@ -6,18 +6,15 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 14:21:37 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/01 17:37:38 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/02 14:57:03 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_malloc.h>
 
-pthread_mutex_t		*mutex_sglton()
+pthread_mutex_t		*mutex_sglton(void)
 {
-	//static pthread_mutex_t	*mutex = NULL;
+	static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
 
-	//if (mutex == NULL)
-	//	pthread_mutex_init(mutex, NULL);
-	return (&g_mutex);
+	return (&mutex);
 }
-

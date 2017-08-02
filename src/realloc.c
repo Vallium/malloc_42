@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:05:37 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/01 14:33:08 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/02 14:57:22 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@ static void		*realloc_new(void **ptr, t_alloc *alloc, size_t size)
 {
 	void	*ret;
 
+	pthread_mutex_unlock(mutex_sglton());
 	ret = malloc(size);
+	pthread_mutex_lock(mutex_sglton());
 	ft_memcpy(ret, *ptr, alloc->size);
+	pthread_mutex_unlock(mutex_sglton());
 	free(*ptr);
+	pthread_mutex_lock(mutex_sglton());
 	return (ret);
 }
 
@@ -41,14 +45,16 @@ void			*realloc(void *ptr, size_t size)
 	t_zone	*zone;
 	t_alloc	*alloc;
 
+	pthread_mutex_lock(mutex_sglton());
 	if (ptr == NULL)
-		return (malloc(size));
+		return (return_ptr(malloc(size)));
 	else if (size == 0)
 	{
+		pthread_mutex_unlock(mutex_sglton());
 		free(ptr);
-		return (NULL);
+		pthread_mutex_lock(mutex_sglton());
+		return (return_ptr(NULL));
 	}
-	pthread_mutex_lock(mutex_sglton());
 	alloc = (t_alloc*)(ptr - JUMPOF(sizeof(t_alloc)));
 	if (alloc->a != A_MAGIC || alloc->b != B_MAGIC)
 		return (return_ptr(ptr));
