@@ -1,11 +1,11 @@
-#include "libft_malloc.h"
-#include <stdio.h>
+//#include "libft_malloc.h"
+//#include <stdio.h>
 
 int		main()
 {
 	int		i;
 
-	printf("----------------------------~~ Main Test ~~-----------------------------\n");
+	//printf("----------------------------~~ Main Test ~~-----------------------------\n");
 /*	malloc(16385);
 	for (i = 0; i < 99; i++) {
 		malloc(4096);
@@ -24,7 +24,7 @@ int		main()
 	void	*ptr7 = malloc(4096 * 4 + 1);
 	void	*ptr8 = malloc(4096 * 4 + 1);
 	void	*ptr9 = malloc(4096 * 4 + 1);
-	show_alloc_mem();
+//	show_alloc_mem();
 	free(ptr9);
 	free(ptr8);
 	free(ptr7);

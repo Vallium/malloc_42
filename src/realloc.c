@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:05:37 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/02 14:57:22 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/03 17:33:05 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void			*realloc(void *ptr, size_t size)
 	t_zone	*zone;
 	t_alloc	*alloc;
 
-	pthread_mutex_lock(mutex_sglton());
 	if (ptr == NULL)
-		return (return_ptr(malloc(size)));
-	else if (size == 0)
+		return (malloc(size));
+	pthread_mutex_lock(mutex_sglton());
+	if (size == 0)
 	{
 		pthread_mutex_unlock(mutex_sglton());
 		free(ptr);
@@ -57,7 +57,7 @@ void			*realloc(void *ptr, size_t size)
 	}
 	alloc = (t_alloc*)(ptr - JUMPOF(sizeof(t_alloc)));
 	if (alloc->a != A_MAGIC || alloc->b != B_MAGIC)
-		return (return_ptr(ptr));
+		return (return_ptr(NULL));
 	zone = alloc->zone;
 	if (size <= alloc->size)
 		alloc->size = size;

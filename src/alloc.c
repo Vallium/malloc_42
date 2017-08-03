@@ -6,13 +6,13 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:52:05 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/02 14:34:37 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/03 18:20:31 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft_malloc.h"
 
-void	*new_alloc_large(size_t size)
+void		*new_alloc_large(size_t size)
 {
 	t_zone	*zone;
 	t_alloc	*alloc;
@@ -30,14 +30,15 @@ void	*new_alloc_large(size_t size)
 	return ((void*)alloc + sizeof(t_alloc));
 }
 
-void	*new_alloc(size_t size, t_type type)
+void		*new_alloc(size_t size, t_type type)
 {
 	t_zone	*zone;
 	t_alloc	*alloc;
 
+	if ((alloc = find_place_to_alloc(size, type)))
+		return ((void*)alloc + sizeof(t_alloc));
 	zone = find_valid_zone(size, type);
-	alloc = zone->allocs;
-	if (zone->nb_allocs)
+	if ((alloc = zone->allocs) && zone->nb_allocs)
 	{
 		while (alloc->last == FALSE)
 			alloc = alloc->next;
@@ -56,4 +57,36 @@ void	*new_alloc(size_t size, t_type type)
 	zone->nb_allocs++;
 	zone->mem_left -= size + sizeof(t_alloc);
 	return ((void*)alloc + sizeof(t_alloc));
+}
+
+t_alloc		*ret_alloc(t_alloc **alloc, t_zone **zone)
+{
+	(*zone)->nb_allocs++;
+	(*alloc)->freed = FALSE;
+	return (*alloc);
+}
+
+t_alloc		*find_place_to_alloc(size_t size, t_type type)
+{
+	t_zone	*zone;
+	t_alloc	*alloc;
+
+	zone = g_allocs.zones;
+	while (zone)
+	{
+		if (zone->type == type)
+		{
+			alloc = zone->allocs;
+			while (alloc->last == FALSE)
+			{
+				if (alloc->freed == TRUE && alloc->size >= size)
+					return (ret_alloc(&alloc, &zone));
+				alloc = alloc->next;
+			}
+			if (alloc->freed == TRUE && alloc->size >= size)
+				return (ret_alloc(&alloc, &zone));
+		}
+		zone = zone->next;
+	}
+	return (NULL);
 }
