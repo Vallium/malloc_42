@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:52:05 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/04 11:47:16 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/04 14:10:21 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,18 @@ static t_alloc		*find_place_to_alloc(size_t size, t_type type)
 		zone = zone->next;
 	}
 	return (NULL);
+}
+
+static void			set_alloc(t_alloc *alloc, t_zone *zone, size_t size)
+{
+	alloc->a = A_MAGIC;
+	alloc->b = B_MAGIC;
+	alloc->size = size;
+	alloc->freed = FALSE;
+	alloc->zone = zone;
+	alloc->next = (void*)alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
+	zone->nb_allocs++;
+	zone->mem_left -= size + sizeof(t_alloc);
 }
 
 void				*new_alloc_large(size_t size)
@@ -87,13 +99,6 @@ void				*new_alloc(size_t size, t_type type)
 		alloc->last = TRUE;
 		alloc->prev = NULL;
 	}
-	alloc->a = A_MAGIC;
-	alloc->b = B_MAGIC;
-	alloc->size = size;
-	alloc->freed = FALSE;
-	alloc->zone = zone;
-	alloc->next = (void*)alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
-	zone->nb_allocs++;
-	zone->mem_left -= size + sizeof(t_alloc);
+	set_alloc(alloc, zone, size);
 	return ((void*)alloc + sizeof(t_alloc));
 }
