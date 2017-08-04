@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:04:47 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/03 17:31:10 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/04 13:35:38 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,33 @@ static void		delete_zone(t_zone **zone)
 	}
 }
 
+static void		defrag(t_alloc *this)
+{
+	this->freed = TRUE;
+	if ((this->prev && this->prev->freed) && this->next->freed)
+	{
+		this->prev->size += this->size + this->next->size + 2 * sizeof(t_alloc);
+		if (this->next->last == TRUE)
+			this->prev->last = TRUE;
+		this->next->next->prev = this->prev;
+		this->prev->next = this->next->next;
+	}
+	else if (this->prev && this->prev->freed)
+	{
+		this->prev->size += this->size + sizeof(t_alloc);
+		this->next->prev = this->prev;
+		this->prev->next = this->next;
+	}
+	else if (!this->last && this->next->freed)
+	{
+		this->size += this->next->size + sizeof(t_alloc);
+		if (this->next->last == TRUE)
+			this->last = TRUE;
+		this->next = this->next->next;
+		this->next->prev = this;
+	}
+}
+
 void			free(void *ptr)
 {
 	t_alloc	*alloc;
@@ -44,7 +71,6 @@ void			free(void *ptr)
 	if (alloc->a != A_MAGIC || alloc->b != B_MAGIC)
 		return ((void)pthread_mutex_unlock(mutex_sglton()));
 	zone = alloc->zone;
-	alloc->freed = TRUE;
 	zone->nb_allocs--;
 	if (zone->nb_allocs == 0)
 	{
@@ -57,5 +83,7 @@ void			free(void *ptr)
 			munmap(zone, sizeof(t_zone) + \
 					sizeof(t_alloc) + JUMPOF(zone->allocs->size));
 	}
+	else
+		defrag(alloc);
 	pthread_mutex_unlock(mutex_sglton());
 }
