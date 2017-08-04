@@ -6,16 +6,35 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:52:05 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/04 14:10:21 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/04 15:38:48 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft_malloc.h"
 
-static t_alloc		*ret_alloc(t_alloc **alloc, t_zone **zone)
+#include <stdlib.h>
+static t_alloc		*ret_alloc(t_alloc **alloc, t_zone **zone, size_t size)
 {
+	t_alloc		*new;
+
 	(*zone)->nb_allocs++;
 	(*alloc)->freed = FALSE;
+	if ((*alloc)->size - size - sizeof(t_alloc) > 0)
+	{
+		new = (t_alloc*)((void*)(*alloc) + sizeof(t_alloc) + size);
+		new->a = A_MAGIC;
+		new->b = B_MAGIC;
+		new->size = (*alloc)->size - size - sizeof(t_alloc);
+		(*alloc)->size = size;
+		new->freed = FALSE;
+		new->last = (*alloc)->last ? TRUE : FALSE;
+		(*alloc)->last = (*alloc)->last ? FALSE : TRUE;
+		new->zone = *zone;
+		new->prev = *alloc;
+		(*alloc)->next->prev = new;
+		new->next = (*alloc)->next;
+		(*alloc)->next = new;
+	}
 	return (*alloc);
 }
 
@@ -33,11 +52,11 @@ static t_alloc		*find_place_to_alloc(size_t size, t_type type)
 			while (alloc->last == FALSE)
 			{
 				if (alloc->freed == TRUE && alloc->size >= size)
-					return (ret_alloc(&alloc, &zone));
+					return (ret_alloc(&alloc, &zone, size));
 				alloc = alloc->next;
 			}
 			if (alloc->freed == TRUE && alloc->size >= size)
-				return (ret_alloc(&alloc, &zone));
+				return (ret_alloc(&alloc, &zone, size));
 		}
 		zone = zone->next;
 	}

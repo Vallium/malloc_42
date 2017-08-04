@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 16:55:28 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/02 15:00:04 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/04 13:22:41 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void		print_alloc(t_alloc *alloc)
 
 static void		print_zone(t_zone *zone)
 {
+	ft_putnbr(sizeof(t_alloc));
 	if (zone->type == TINY)
 		ft_putstr("TINY : ");
 	else if (zone->type == SMALL)
@@ -62,8 +63,44 @@ void			show_alloc_mem(void)
 			}
 			alloc = alloc->next;
 		}
-		print_alloc(alloc);
-		total += alloc->size;
+		if (alloc->freed != TRUE)
+		{
+			print_alloc(alloc);
+			total += alloc->size;
+		}
+		zone = zone->next;
+	}
+	print_total(total);
+	pthread_mutex_unlock(mutex_sglton());
+}
+
+void			show_freed_mem(void)
+{
+	t_zone	*zone;
+	t_alloc	*alloc;
+	size_t	total;
+
+	pthread_mutex_lock(mutex_sglton());
+	zone = g_allocs.zones;
+	total = 0;
+	ft_putstr("Memory freed:\n");
+	while (zone && (alloc = zone->allocs))
+	{
+		//print_zone(zone);
+		while (alloc->last == FALSE)
+		{
+			if (alloc->freed == TRUE)
+			{
+				print_alloc(alloc);
+				total += alloc->size;
+			}
+			alloc = alloc->next;
+		}
+		if (alloc->freed == TRUE)
+		{
+			print_alloc(alloc);
+			total += alloc->size;
+		}
 		zone = zone->next;
 	}
 	print_total(total);
