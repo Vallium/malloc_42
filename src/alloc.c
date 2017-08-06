@@ -12,23 +12,26 @@
 
 #include "libft_malloc.h"
 
-#include <stdlib.h>
 static t_alloc		*ret_alloc(t_alloc **alloc, t_zone **zone, size_t size)
 {
 	t_alloc		*new;
 
 	(*zone)->nb_allocs++;
 	(*alloc)->freed = FALSE;
+	ft_putchar('\n');
+	ft_putnbr((*alloc)->size);
+	//ft_putptr(*alloc);// + sizeof(t_alloc));
+	ft_putchar('\n');
 	if ((*alloc)->size - size - sizeof(t_alloc) > 0)
 	{
-		new = (t_alloc*)((void*)(*alloc) + sizeof(t_alloc) + size);
+		new = (void*)(*alloc) + sizeof(t_alloc) + size;
 		new->a = A_MAGIC;
 		new->b = B_MAGIC;
 		new->size = (*alloc)->size - size - sizeof(t_alloc);
 		(*alloc)->size = size;
-		new->freed = FALSE;
+		new->freed = TRUE;
 		new->last = (*alloc)->last ? TRUE : FALSE;
-		(*alloc)->last = (*alloc)->last ? FALSE : TRUE;
+		(*alloc)->last = FALSE;
 		new->zone = *zone;
 		new->prev = *alloc;
 		(*alloc)->next->prev = new;

@@ -31,7 +31,10 @@ int		main()
 	
 	show_alloc_mem();
 	show_freed_mem();
-	malloc(110);
+	malloc(87);
+	show_alloc_mem();
+	show_freed_mem();
+	malloc(2);
 	show_alloc_mem();
 	show_freed_mem();
 //	free(ptr9);
