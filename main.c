@@ -25,18 +25,27 @@ int		main()
 	void	*ptr8 = malloc(8);
 	void	*ptr9 = malloc(9);*/
 	show_alloc_mem();
+	ft_putchar('\n');
 	show_freed_mem();
 
 	free(ptr2);
 	
 	show_alloc_mem();
+	ft_putchar('\n');
 	show_freed_mem();
+	ft_putchar('\n');
 	malloc(87);
 	show_alloc_mem();
+	ft_putchar('\n');
 	show_freed_mem();
-	malloc(2);
+	ft_putchar('\n');
+	malloc(58);
+	malloc(57);
+
 	show_alloc_mem();
+	ft_putchar('\n');
 	show_freed_mem();
+	ft_putchar('\n');
 //	free(ptr9);
 //	free(ptr8);
 //	free(ptr7);

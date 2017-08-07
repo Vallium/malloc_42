@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:52:05 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/04 15:38:48 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/07 12:11:27 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,7 @@ static t_alloc		*ret_alloc(t_alloc **alloc, t_zone **zone, size_t size)
 
 	(*zone)->nb_allocs++;
 	(*alloc)->freed = FALSE;
-	ft_putchar('\n');
-	ft_putnbr((*alloc)->size);
-	//ft_putptr(*alloc);// + sizeof(t_alloc));
-	ft_putchar('\n');
-	if ((*alloc)->size - size - sizeof(t_alloc) > 0)
+	if ((*alloc)->size - size > sizeof(t_alloc) + 1)
 	{
 		new = (void*)(*alloc) + sizeof(t_alloc) + size;
 		new->a = A_MAGIC;

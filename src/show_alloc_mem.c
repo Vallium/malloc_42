@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 16:55:28 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/04 13:22:41 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/07 12:35:08 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void		print_alloc(t_alloc *alloc)
 
 static void		print_zone(t_zone *zone)
 {
-	ft_putnbr(sizeof(t_alloc));
 	if (zone->type == TINY)
 		ft_putstr("TINY : ");
 	else if (zone->type == SMALL)
