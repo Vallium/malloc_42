@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:04:47 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/07 14:45:41 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/07 16:08:07 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,9 @@ static void		delete_zone(t_zone **zone)
 	}
 }
 
-static void		defrag(t_alloc *this)
+static int		defrag(t_alloc *this)
 {
 	this->freed = TRUE;
-	if (getenv("MallocScribble") != NULL)
-		ft_memset((void*)this + sizeof(t_alloc), 0x55, this->size);
 	if ((this->prev && this->prev->freed) && this->next->freed)
 	{
 		this->prev->size += this->size + this->next->size + 2 * sizeof(t_alloc);
@@ -60,6 +58,7 @@ static void		defrag(t_alloc *this)
 		this->next = this->next->next;
 		this->next->prev = this;
 	}
+	return (0);
 }
 
 void			free(void *ptr)
@@ -75,7 +74,9 @@ void			free(void *ptr)
 		return ((void)pthread_mutex_unlock(mutex_sglton()));
 	zone = alloc->zone;
 	zone->nb_allocs--;
-	if (zone->nb_allocs == 0)
+	if (getenv("MallocScribble") != NULL)
+		ft_memset((void*)alloc + sizeof(t_alloc), 0x55, alloc->size);
+	if (zone->nb_allocs == 0 || defrag(alloc))
 	{
 		delete_zone(&zone);
 		if (zone->type == TINY)
@@ -86,7 +87,5 @@ void			free(void *ptr)
 			munmap(zone, sizeof(t_zone) + \
 					sizeof(t_alloc) + JUMPOF(zone->allocs->size));
 	}
-	else
-		defrag(alloc);
 	pthread_mutex_unlock(mutex_sglton());
 }
