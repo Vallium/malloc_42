@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/08/01 14:23:14 by aalliot          ###   ########.fr        #
+#    Updated: 2017/08/07 15:48:10 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ LINKNAME	= libft_malloc.so
 SRC =	malloc.c			\
 		realloc.c			\
 		free.c				\
-		show_alloc_mem.c	\
+		show_mem.c			\
+		print_mem.c			\
 		zones.c				\
 		alloc.c				\
 		mutex.c

@@ -6,7 +6,7 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/01 16:54:02 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/04 13:15:04 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/07 15:48:27 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct			s_allocs
 
 t_allocs				g_allocs;
 
+void					print_mem(t_bool freed);
 void					show_alloc_mem();
 void					show_freed_mem();
 
