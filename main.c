@@ -28,19 +28,33 @@ int		main()
 	ft_putchar('\n');
 	show_freed_mem();
 
-	free(ptr2);
+	char *str;
+	str = (char*)ptr1;
+	for (i = 0; i < 100; i++)
+		ft_putchar(str[i]);
+	ft_putchar('\n');
+
+	free(ptr1);
 	
 	show_alloc_mem();
 	ft_putchar('\n');
 	show_freed_mem();
 	ft_putchar('\n');
-	malloc(87);
+	ptr1 = malloc(87);
+	str = (char*)ptr1;
+	for (i = 0; i < 87; i++)
+		ft_putchar(str[i]);
+	ft_putchar('\n');
 	show_alloc_mem();
 	ft_putchar('\n');
 	show_freed_mem();
 	ft_putchar('\n');
 	malloc(58);
-	malloc(57);
+	ptr1 = malloc(32768);
+	str = (char*)ptr1;
+	for (i = 0; i < 32768; i++)
+		ft_putchar(str[i]);
+	ft_putchar('\n');
 
 	show_alloc_mem();
 	ft_putchar('\n');

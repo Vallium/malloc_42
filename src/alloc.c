@@ -6,11 +6,12 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/26 17:52:05 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/07 12:11:27 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/07 14:58:45 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_malloc.h"
+#include <libft_malloc.h>
+#include <stdlib.h>
 
 static t_alloc		*ret_alloc(t_alloc **alloc, t_zone **zone, size_t size)
 {
@@ -34,6 +35,8 @@ static t_alloc		*ret_alloc(t_alloc **alloc, t_zone **zone, size_t size)
 		new->next = (*alloc)->next;
 		(*alloc)->next = new;
 	}
+	if (getenv("MallocPreScribble") != NULL)
+		ft_memset((void*)(*alloc) + sizeof(t_alloc), 0xAA, (*alloc)->size);
 	return (*alloc);
 }
 
@@ -72,6 +75,8 @@ static void			set_alloc(t_alloc *alloc, t_zone *zone, size_t size)
 	alloc->next = (void*)alloc + sizeof(t_alloc) + JUMPOF(alloc->size);
 	zone->nb_allocs++;
 	zone->mem_left -= size + sizeof(t_alloc);
+	if (getenv("MallocPreScribble") != NULL)
+		ft_memset((void*)alloc + sizeof(t_alloc), 0xAA, alloc->size);
 }
 
 void				*new_alloc_large(size_t size)
@@ -90,6 +95,8 @@ void				*new_alloc_large(size_t size)
 	alloc->last = TRUE;
 	alloc->zone = zone;
 	zone->nb_allocs++;
+	if (getenv("MallocPreScribble") != NULL)
+		ft_memset((void*)alloc + sizeof(t_alloc), 0xAA, alloc->size);
 	return ((void*)alloc + sizeof(t_alloc));
 }
 

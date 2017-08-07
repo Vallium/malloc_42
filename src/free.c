@@ -6,12 +6,13 @@
 /*   By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/19 14:04:47 by aalliot           #+#    #+#             */
-/*   Updated: 2017/08/04 13:35:38 by aalliot          ###   ########.fr       */
+/*   Updated: 2017/08/07 14:45:41 by aalliot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft_malloc.h>
 #include <sys/mman.h>
+#include <stdlib.h>
 
 static void		delete_zone(t_zone **zone)
 {
@@ -35,6 +36,8 @@ static void		delete_zone(t_zone **zone)
 static void		defrag(t_alloc *this)
 {
 	this->freed = TRUE;
+	if (getenv("MallocScribble") != NULL)
+		ft_memset((void*)this + sizeof(t_alloc), 0x55, this->size);
 	if ((this->prev && this->prev->freed) && this->next->freed)
 	{
 		this->prev->size += this->size + this->next->size + 2 * sizeof(t_alloc);
