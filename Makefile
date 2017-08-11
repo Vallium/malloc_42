@@ -6,7 +6,7 @@
 #    By: aalliot <aalliot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 15:55:17 by aalliot           #+#    #+#              #
-#    Updated: 2017/08/01 14:23:14 by aalliot          ###   ########.fr        #
+#    Updated: 2017/08/07 16:46:07 by aalliot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ LINKNAME	= libft_malloc.so
 SRC =	malloc.c			\
 		realloc.c			\
 		free.c				\
-		show_alloc_mem.c	\
+		show_mem.c			\
+		print_mem.c			\
 		zones.c				\
 		alloc.c				\
 		mutex.c
@@ -94,9 +95,9 @@ binary_debug: $(DYNAMIC_DEBUG_LIB)
 	$(CC) -g -o malloc_test_debug main.c -L. -l$(DEBUGLIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 
 tests: $(DYNAMIC_LIB)
-	$(CC) -o my_test0 test_srcs/test0.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
-	$(CC) -o my_test1 test_srcs/test1.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
-	$(CC) -o my_test2 test_srcs/test2.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
+	$(CC) -o test0 test_srcs/test0.c
+	$(CC) -o test1 test_srcs/test1.c
+	$(CC) -o test2 test_srcs/test2.c
 	$(CC) -o my_test3 test_srcs/test3.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 	$(CC) -o my_test3+ test_srcs/test3+.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
 	$(CC) -o my_test4 test_srcs/test4.c -L. -l$(LIBNAME) -I$(HEAD_DIR) -I$(LIBFT_HEAD)
