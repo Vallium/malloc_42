@@ -8,6 +8,7 @@ git:
 
 before_install:
     - git submodule update --init --remote --recursive
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 
 install:
 
